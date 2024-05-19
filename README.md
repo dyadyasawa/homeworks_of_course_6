@@ -1,1 +1,1 @@
-# homeworks_of_course_6
+# homeworks_of_course_7
