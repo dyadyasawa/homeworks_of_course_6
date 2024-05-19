@@ -11,10 +11,10 @@ router.register("", CourseViewSet)
 
 urlpatterns = [
     path("lesson/", LessonListApiView.as_view(), name="lesson_list"),
-    path("lesson/<int:pk>/detail/", LessonRetrieveApiView.as_view(), name="lesson_detail"),
+    path("lesson/detail/<int:pk>/", LessonRetrieveApiView.as_view(), name="lesson_detail"),
     path("lesson/create/", LessonCreateApiView.as_view(), name="lesson_create"),
-    path("lesson/<int:pk>/update/", LessonUpdateApiView.as_view(), name="lesson_update"),
-    path("lesson/<int:pk>/delete/", LessonDestroyApiView.as_view(), name="lesson_delete"),
+    path("lesson/update/<int:pk>/", LessonUpdateApiView.as_view(), name="lesson_update"),
+    path("lesson/delete/<int:pk>/", LessonDestroyApiView.as_view(), name="lesson_delete"),
 ]
 
 urlpatterns += router.urls
