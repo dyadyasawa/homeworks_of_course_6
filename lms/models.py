@@ -25,7 +25,7 @@ class Lesson(models.Model):
     url = models.CharField(
         max_length=100, verbose_name="Ссылка на видео", blank=True, null=True
     )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс", blank=True, null=True)
 
     class Meta:
         verbose_name = "Урок"
