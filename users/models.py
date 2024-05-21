@@ -41,8 +41,8 @@ class Payments(models.Model):
     payment_method = models.CharField(max_length=10, default="CASH", choices=METHODS,verbose_name="Способ оплаты")
 
     class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
+        verbose_name = "Платеж"
+        verbose_name_plural = "Платежи"
 
     def __str__(self):
         return self.user
