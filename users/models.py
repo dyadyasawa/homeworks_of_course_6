@@ -23,7 +23,7 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
 
     def __str__(self):
-        return self.email
+        return f"{self.email}"
 
 
 class Payments(models.Model):
@@ -38,11 +38,11 @@ class Payments(models.Model):
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Оплаченный курс", blank=True, null=True)
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Оплаченный урок", blank=True, null=True)
     payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
-    payment_method = models.CharField(max_length=10, default="CASH", choices=METHODS,verbose_name="Способ оплаты")
+    payment_method = models.CharField(max_length=10, default="CASH", choices=METHODS, verbose_name="Способ оплаты")
 
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
 
     def __str__(self):
-        return self.user
+        return f"{self.user}"
