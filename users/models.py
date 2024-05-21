@@ -43,6 +43,7 @@ class Payments(models.Model):
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
+        ordering = ("payments_date",)
 
     def __str__(self):
         return f"{self.user}"
