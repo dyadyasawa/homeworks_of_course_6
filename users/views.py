@@ -13,6 +13,7 @@ class PaymentsListApiView(ListAPIView):
     queryset = Payments.objects.all()
     serializer_class = PaymentsSerializer
 
+
     # filter_backends = [DjangoFilterBackend]
     # filterset_fields = ["payment_method"]
 
@@ -30,3 +31,4 @@ class UserCreateAPIView(CreateAPIView):
         user = serializer.save(is_active=True)
         user.set_password(user.password)
         user.save()
+
