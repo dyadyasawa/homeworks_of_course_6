@@ -36,15 +36,15 @@ class LessonListApiView(ListAPIView):
 class LessonRetrieveApiView(RetrieveAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsModerators, IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsModerators | IsOwner,)
 
 
 class LessonUpdateApiView(UpdateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = (IsModerators, IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsModerators | IsOwner,)
 
 
 class LessonDestroyApiView(DestroyAPIView):
     queryset = Lesson.objects.all()
-    permission_classes = (~IsModerators, IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsOwner | ~IsModerators,)
