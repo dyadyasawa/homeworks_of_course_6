@@ -26,4 +26,4 @@ class CourseSerializer(ModelSerializer):
 class SubscriptionSerializer(ModelSerializer):
     class Meta:
         model = Subscription
-        fields = "__all__"
+        fields = ("course",)
