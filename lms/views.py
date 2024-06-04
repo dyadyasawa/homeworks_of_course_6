@@ -54,9 +54,9 @@ class SubscriptionCreateAPIView(CreateAPIView):
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticated,)
 
-    def post(self, *args, **kwargs):
-        user = self.requests.user
-        course_id = self.reqests.data.get("course")
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        course_id = self.request.data.get("course")
         course_item = get_object_or_404(Course, pk=course_id)
 
         if Subscription.objects.filter(user=user, course=course_item).exists():
