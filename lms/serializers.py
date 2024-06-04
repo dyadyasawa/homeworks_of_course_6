@@ -1,7 +1,7 @@
 
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from lms.validators import YouTubeValidator
-from lms.models import Course, Lesson
+from lms.models import Course, Lesson, Subscription
 
 
 class LessonSerializer(ModelSerializer):
@@ -21,3 +21,9 @@ class CourseSerializer(ModelSerializer):
 
     def get_lesson_count(self, instance):  # Выводим количество уроков курса
         return instance.lesson_set.count()
+
+
+class SubscriptionSerializer(ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = "__all__"
