@@ -113,7 +113,11 @@ class CourseTestCase(APITestCase):
 
     def test_course_create(self):
         url = reverse("lms:course-list")
-        data = {"title": "Физика"}
+        data = {
+            "title": "Физика",
+            "description": "Наука о движении",
+            "owner": self.user
+        }
         response = self.client.post(url, data)
 
         self.assertEqual(
