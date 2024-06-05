@@ -151,7 +151,38 @@ class CourseTestCase(APITestCase):
         url = reverse("lms:course-list")
         response = self.client.get(url)
         data = response.json()
-        print(data)
+        # print(data)
         self.assertEqual(
             response.status_code, status.HTTP_200_OK
+        )
+        result = {
+            "count": 1,
+            "next": None,
+            "previous": None,
+            "results": [
+                {
+                    "id": self.course.pk,
+                    "lesson": [
+                        {
+                            "id": self.lesson.pk,
+                            "title": self.lesson.title,
+                            "description": self.lesson.description,
+                            "preview": None,
+                            "url": None,
+                            "course": self.course.pk,
+                            "owner": self.user.pk
+                        }
+
+                    ],
+                    "lesson_count": 1,
+                    "subscription": False,
+                    "title": self.course.title,
+                    "description": self.course.description,
+                    "preview": None,
+                    "owner": self.user.pk
+                }
+            ]
+        }
+        self.assertEqual(
+            data, result
         )
