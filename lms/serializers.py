@@ -26,4 +26,4 @@ class CourseSerializer(ModelSerializer):
 class SubscriptionSerializer(ModelSerializer):
     class Meta:
         model = Subscription
-        fields = ("course",)
+        fields = ("sign_of_subscription",)
