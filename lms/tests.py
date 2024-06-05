@@ -90,3 +90,68 @@ class LessonTestCase(APITestCase):
         self.assertEqual(
             data, result
         )
+
+
+class CourseTestCase(APITestCase):
+
+    def setUp(self):
+        self.user = User.objects.create(email="admin@example.com")
+        self.course = Course.objects.create(title="Математика", description="Точная наука", owner=self.user)
+        self.lesson = Lesson.objects.create(title="Урок_1", description="Введение", course=self.course, owner=self.user)
+        self.client.force_authenticate(user=self.user)
+
+    def test_course_retrieve(self):
+        url = reverse("lms:course-detail", args=(self.course.pk,))
+        response = self.client.get(url)
+        data = response.json()
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+        self.assertEqual(
+            data.get("title"), self.course.title
+        )
+
+    def test_course_create(self):
+        url = reverse("lms:course-list")
+        data = {"title": "Физика"}
+        response = self.client.post(url, data)
+
+        self.assertEqual(
+            response.status_code, status.HTTP_201_CREATED
+        )
+        self.assertEqual(
+            Course.objects.all().count(), 2
+        )
+
+    def test_course_update(self):
+        url = reverse("lms:course-detail", args=(self.course.pk,))
+        data = {
+            "title": "География"
+        }
+        response = self.client.patch(url, data)
+        data = response.json()
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+        self.assertEqual(
+            data.get("title"), "География"
+        )
+
+    def test_course_delete(self):
+        url = reverse("lms:course-detail", args=(self.course.pk,))
+        response = self.client.delete(url)
+        self.assertEqual(
+            response.status_code, status.HTTP_204_NO_CONTENT
+        )
+        self.assertEqual(
+            Course.objects.all().count(), 0
+        )
+
+    def test_course_list(self):
+        url = reverse("lms:course-list")
+        response = self.client.get(url)
+        data = response.json()
+        print(data)
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
