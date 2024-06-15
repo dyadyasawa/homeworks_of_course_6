@@ -10,6 +10,7 @@ def create_stripe_product(instance):
     """ Создаем stripe продукт. """
     # print(stripe.api_key)
     # print(STRIPE_API_KEY)
+    # print(f"{instance.paid_course}")
 
     title_product = f"{instance.paid_course}"
     stripe_product = stripe.Product.create(name=f"{title_product}")
@@ -24,13 +25,13 @@ def convert_rub_to_dol(amount):
     return result
 
 
-def create_stripe_price(stripe_product_id, amount):
+def create_stripe_price(amount, stripe_product_id):
     """ Создаем цену. """
     return stripe.Price.create(
         currency="usd",
-        unit_amount=int(amount * 100),
+        unit_amount=amount * 100,
         product_data={"name": "Payment"},
-        producn=stripe_product_id,
+        product=stripe_product_id,
     )
 
 
