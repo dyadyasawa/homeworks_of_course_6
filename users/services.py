@@ -8,6 +8,9 @@ stripe.api_key = STRIPE_API_KEY
 
 def create_stripe_product(instance):
     """ Создаем stripe продукт. """
+    # print(stripe.api_key)
+    # print(STRIPE_API_KEY)
+
     title_product = f"{instance.paid_course}"
     stripe_product = stripe.Product.create(name=f"{title_product}")
     return stripe_product.get("id")
