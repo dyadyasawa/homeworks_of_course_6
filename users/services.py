@@ -12,7 +12,7 @@ def create_stripe_product(instance):
     # print(STRIPE_API_KEY)
     # print(f"{instance.paid_course}")
 
-    title_product = f"{instance.paid_course}"
+    title_product = f"{instance.paid_course}" if instance.paid_course else instance.paid_lesson
     stripe_product = stripe.Product.create(name=f"{title_product}")
     return stripe_product.get("id")
 
