@@ -1,13 +1,18 @@
+
+import datetime
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 
 from lms.models import Course, Lesson, Subscription
 from lms.paginations import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from users.permissions import IsModerators, IsOwner
+
+from lms.tasks import privet
 
 
 class CourseViewSet(ModelViewSet):
@@ -23,6 +28,23 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModerators | IsOwner,)
         return super().get_permissions()
+
+    # @action(detail=True, methods=("patch",))
+    # def update_date(self, pk, request, *args, **kwargs):
+        # partial = kwargs.pop('partial', False)
+        # instance = self. get_object()
+        # date = instance.last_update_date
+        # print(date)
+        # instance.last_update_date = datetime.datetime.now()
+        # serializer = self.get_serializer(instance, data=request.data)  #, partial=partial)
+        # serializer.is_valid(raise_exception=True)
+        # self.perform_update(serializer)
+        # sending_mail.delay(instance.id, date)
+        # return Response(serializer.data)
+
+    @action(detail=False, methods=("patch",))
+    def update_course(self):
+        privet.delay()
 
 
 class LessonCreateApiView(CreateAPIView):
@@ -56,17 +78,27 @@ class LessonDestroyApiView(DestroyAPIView):
 class SubscriptionCreateAPIView(CreateAPIView):
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticated,)
+    queryset = Subscription.objects.all()
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course")
         course = get_object_or_404(Course, pk=course_id)
         subs_item = Subscription.objects.filter(user=user, course=course)
+
+        # print(user)
+        # print(course_id)
+        # print(course)
+
         if subs_item.exists():
             subs_item.delete()  # Удаляем подписку
             message = 'подписка удалена'
         else:
             Subscription.objects.create(user=user, course=course)  # Создаем подписку
             message = 'подписка добавлена'
+            Subscription.sign_of_subscription = True
 
         return Response({"message": message})
