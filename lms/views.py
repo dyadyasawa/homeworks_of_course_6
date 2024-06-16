@@ -71,17 +71,27 @@ class LessonDestroyApiView(DestroyAPIView):
 class SubscriptionCreateAPIView(CreateAPIView):
     serializer_class = SubscriptionSerializer
     permission_classes = (IsAuthenticated,)
+    queryset = Subscription.objects.all()
+
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
         course_id = self.request.data.get("course")
         course = get_object_or_404(Course, pk=course_id)
         subs_item = Subscription.objects.filter(user=user, course=course)
+
+        # print(user)
+        # print(course_id)
+        # print(course)
+
         if subs_item.exists():
             subs_item.delete()  # Удаляем подписку
             message = 'подписка удалена'
         else:
             Subscription.objects.create(user=user, course=course)  # Создаем подписку
             message = 'подписка добавлена'
+            Subscription.sign_of_subscription = True
 
         return Response({"message": message})
