@@ -26,3 +26,8 @@ def check_last_update_date(pk):
                         recipient_list=subscribers,
                         fail_silently=False,
                     )
+
+
+@shared_task
+def privet():
+    print("Всем привет!")

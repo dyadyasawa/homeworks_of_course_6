@@ -5,11 +5,14 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView,
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 
 from lms.models import Course, Lesson, Subscription
 from lms.paginations import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from users.permissions import IsModerators, IsOwner
+
+from lms.tasks import privet
 
 
 class CourseViewSet(ModelViewSet):
@@ -27,17 +30,21 @@ class CourseViewSet(ModelViewSet):
         return super().get_permissions()
 
     # @action(detail=True, methods=("patch",))
-    def update_date(self, pk, request, *args, **kwargs):
+    # def update_date(self, pk, request, *args, **kwargs):
         # partial = kwargs.pop('partial', False)
-        instance = self. get_object()
-        date = instance.last_update_date
+        # instance = self. get_object()
+        # date = instance.last_update_date
         # print(date)
-        instance.last_update_date = datetime.datetime.now()
-        serializer = self.get_serializer(instance, data=request.data)  #, partial=partial)
-        serializer.is_valid(raise_exception=True)
+        # instance.last_update_date = datetime.datetime.now()
+        # serializer = self.get_serializer(instance, data=request.data)  #, partial=partial)
+        # serializer.is_valid(raise_exception=True)
         # self.perform_update(serializer)
         # sending_mail.delay(instance.id, date)
         # return Response(serializer.data)
+
+    @action(detail=False, methods=("patch",))
+    def update_course(self):
+        privet.delay()
 
 
 class LessonCreateApiView(CreateAPIView):
