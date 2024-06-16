@@ -1,3 +1,5 @@
+
+import datetime
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -23,6 +25,19 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModerators | IsOwner,)
         return super().get_permissions()
+
+    # @action(detail=True, methods=("patch",))
+    def update_date(self, pk, request, *args, **kwargs):
+        # partial = kwargs.pop('partial', False)
+        instance = self. get_object()
+        date = instance.last_update_date
+        # print(date)
+        instance.last_update_date = datetime.datetime.now()
+        serializer = self.get_serializer(instance, data=request.data)  #, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        # self.perform_update(serializer)
+        # sending_mail.delay(instance.id, date)
+        # return Response(serializer.data)
 
 
 class LessonCreateApiView(CreateAPIView):
