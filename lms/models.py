@@ -6,9 +6,8 @@ from config.settings import AUTH_USER_MODEL
 class Course(models.Model):
     title = models.CharField(max_length=50, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
-    preview = models.ImageField(
-        upload_to="lms/courses", verbose_name="Превью", blank=True, null=True
-    )
+    preview = models.ImageField(upload_to="lms/courses", verbose_name="Превью", blank=True, null=True)
+    last_update_date = models.DateTimeField(blank=True, null=True, verbose_name="Дата последнего обновления")
     owner = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
 
     class Meta:
