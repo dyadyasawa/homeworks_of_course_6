@@ -12,7 +12,7 @@ from lms.paginations import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from users.permissions import IsModerators, IsOwner
 
-from lms.tasks import privet
+from lms.tasks import privet, check_last_update_date
 
 
 class CourseViewSet(ModelViewSet):
@@ -31,7 +31,8 @@ class CourseViewSet(ModelViewSet):
 
     def perform_update(self, serializer):
         instance = serializer.save()
-        privet.delay(instance.id)
+        # privet.delay(instance.id)
+        check_last_update_date.delay(instance.id)
         return instance
 
 
