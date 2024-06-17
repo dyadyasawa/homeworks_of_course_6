@@ -43,8 +43,10 @@ class CourseViewSet(ModelViewSet):
         # return Response(serializer.data)
 
     # @action(detail=False, methods=("patch",))
-    def update_course(self):
-        privet.delay()
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        privet.delay(instance.id)
+        return instance
 
 
 class LessonCreateApiView(CreateAPIView):

@@ -29,5 +29,5 @@ def check_last_update_date(pk):
 
 
 @shared_task
-def privet():
+def privet(pk):
     print("***** ВСЕМ ПРИВЕ-Е-Е-Е-Т !!!!! *****")
