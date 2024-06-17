@@ -42,7 +42,7 @@ class CourseViewSet(ModelViewSet):
         # sending_mail.delay(instance.id, date)
         # return Response(serializer.data)
 
-    @action(detail=False, methods=("patch",))
+    # @action(detail=False, methods=("patch",))
     def update_course(self):
         privet.delay()
 

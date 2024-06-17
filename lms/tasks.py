@@ -30,4 +30,4 @@ def check_last_update_date(pk):
 
 @shared_task
 def privet():
-    print("Всем привет!")
+    print("***** ВСЕМ ПРИВЕ-Е-Е-Е-Т !!!!! *****")
