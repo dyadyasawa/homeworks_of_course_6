@@ -40,8 +40,13 @@ def check_last_update_date(pk):
                     for item in user_id_list:
                         email = User.objects.get(pk=item).email
                         user_email.append(email)
-                    # return user_email
-                    print(user_email)
+                    # print(user_email)
+                    send_mail(
+                        subject=f"Курс '{course.title}' был обновлен.",
+                        message=f"В программе курса '{course.title}' произошли изменения.",
+                        from_email=EMAIL_HOST_USER,
+                        recipient_list=user_email,
+                    )
 
 
 @shared_task
