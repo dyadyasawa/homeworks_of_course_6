@@ -18,36 +18,30 @@ def check_last_update_date(pk):
         real_date_second = int(current_date.timestamp())
         date_from_db_second = int(course.last_update_date.timestamp())
 
-        print(real_date_second)
-        print(date_from_db_second)
+        # print(real_date_second)
+        # print(date_from_db_second)
 
         if date_from_db_second < real_date_second:
-            # course.last_update_date = None
-            # course.save()
-            # print(f"Нынешняя дата вот такая: {current_date}")
-            # print(f"Дата из базы данных: {course.last_update_date}")
 
             course.last_update_date = current_date
             course.save(update_fields=["last_update_date"])
 
-            print("Пора!")
-        else:
-            print("Рановато.")
+            # print("Пора!")
+        # else:
+        #     print("Рановато.")
 
-
-
-    # subscription = Subscription.objects.filter(course_id=pk, sign_of_subscription=True)
-    # user_id_list = []
-    # if subscription:
-    #     for sub in subscription:
-    #         user_id_list.append(sub.user_id)
-    #     if len(user_id_list) > 0:
-    #         user_email = []
-    #         for item in user_id_list:
-    #             email = User.objects.get(pk=item).email
-    #             user_email.append(email)
-    #         # return user_email
-    #         print(user_email)
+            subscription = Subscription.objects.filter(course_id=pk, sign_of_subscription=True)
+            user_id_list = []
+            if subscription:
+                for sub in subscription:
+                    user_id_list.append(sub.user_id)
+                if len(user_id_list) > 0:
+                    user_email = []
+                    for item in user_id_list:
+                        email = User.objects.get(pk=item).email
+                        user_email.append(email)
+                    # return user_email
+                    print(user_email)
 
 
 @shared_task
