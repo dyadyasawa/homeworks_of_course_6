@@ -11,17 +11,24 @@ from users.models import User
 @shared_task
 def check_last_update_date(pk):
     current_date = datetime.datetime.now()  # Текущая дата
-    course = Course.objects.get(pk=pk)
-    if course:
 
-        if not course.last_update_date or int(course.last_update_date.timestamp()) < int(current_date.timestamp()):
+    course = Course.objects.get(pk=pk)
+
+    if course:
+        real_date_second = int(current_date.timestamp())
+        date_from_db_second = int(course.last_update_date.timestamp())
+
+        print(real_date_second)
+        print(date_from_db_second)
+
+        if date_from_db_second < real_date_second:
             # course.last_update_date = None
             # course.save()
-            print(f"Нынешняя дата вот такая: {current_date}")
-            print(f"Дата из базы данных: {course.last_update_date}")
+            # print(f"Нынешняя дата вот такая: {current_date}")
+            # print(f"Дата из базы данных: {course.last_update_date}")
 
             course.last_update_date = current_date
-            course.save()
+            course.save(update_fields=["last_update_date"])
 
             print("Пора!")
         else:
