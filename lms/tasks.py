@@ -21,7 +21,7 @@ def check_last_update_date(pk):
         # print(real_date_second)
         # print(date_from_db_second)
 
-        if date_from_db_second < real_date_second:
+        if date_from_db_second is None or date_from_db_second < real_date_second:
 
             course.last_update_date = current_date
             course.save(update_fields=["last_update_date"])
