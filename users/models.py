@@ -1,8 +1,8 @@
-
+from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils import timezone
+# from django.utils import timezone
 
 from lms.models import Course, Lesson
 
@@ -13,7 +13,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=25, verbose_name="Телефон", blank=True, null=True)
     city = models.CharField(max_length=25, verbose_name="Город", blank=True, null=True)
     avatar = models.ImageField(upload_to="users/avatars", verbose_name="Аватар", blank=True, null=True)
-    last_login = models.DateTimeField(auto_now_add=timezone.now, verbose_name="Время последнего посещения", blank=True, null=True)
+    last_login = models.DateTimeField(default=datetime.now, verbose_name="Время последнего посещения", blank=True, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
