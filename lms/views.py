@@ -12,7 +12,7 @@ from lms.paginations import CustomPagination
 from lms.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
 from users.permissions import IsModerators, IsOwner
 
-from lms.tasks import privet
+from lms.tasks import privet, check_last_update_date
 
 
 class CourseViewSet(ModelViewSet):
@@ -29,22 +29,11 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (~IsModerators | IsOwner,)
         return super().get_permissions()
 
-    # @action(detail=True, methods=("patch",))
-    # def update_date(self, pk, request, *args, **kwargs):
-        # partial = kwargs.pop('partial', False)
-        # instance = self. get_object()
-        # date = instance.last_update_date
-        # print(date)
-        # instance.last_update_date = datetime.datetime.now()
-        # serializer = self.get_serializer(instance, data=request.data)  #, partial=partial)
-        # serializer.is_valid(raise_exception=True)
-        # self.perform_update(serializer)
-        # sending_mail.delay(instance.id, date)
-        # return Response(serializer.data)
-
-    @action(detail=False, methods=("patch",))
-    def update_course(self):
-        privet.delay()
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        # privet.delay(instance.id)
+        check_last_update_date.delay(instance.id)
+        return instance
 
 
 class LessonCreateApiView(CreateAPIView):
@@ -97,8 +86,6 @@ class SubscriptionCreateAPIView(CreateAPIView):
             subs_item.delete()  # Удаляем подписку
             message = 'подписка удалена'
         else:
-            Subscription.objects.create(user=user, course=course)  # Создаем подписку
+            Subscription.objects.create(user=user, course=course, sign_of_subscription=True)  # Создаем подписку
             message = 'подписка добавлена'
-            Subscription.sign_of_subscription = True
-
         return Response({"message": message})
